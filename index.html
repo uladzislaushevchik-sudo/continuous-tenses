@@ -2,26 +2,430 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Continuous Tenses</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d47a1">
+<title>Continuous Tenses · Present · Past · Future</title>
 <style>
-body{font-family:system-ui;max-width:560px;margin:40px auto;padding:0 16px;line-height:1.5;background:#eef3f9;color:#0f1a2a}
-.card{background:#fff;border-radius:12px;padding:20px;border:1px solid #c5d0de}
-a.btn{display:inline-block;background:#1565c0;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px}
-code{background:#e8eef4;padding:2px 6px;border-radius:4px;font-size:.9em}
+:root{
+  --p:#1565c0;--p2:#0d47a1;--s:#2e7d32;--e:#c62828;--w:#ef6c00;
+  --bg:#eef3f9;--c:#fff;--t:#0f1a2a;--m:#5a6a7e;--b:#c5d0de;
+  --ok:rgba(46,125,50,.12);--bad:rgba(198,40,40,.12);
+}
+[data-theme=dark]{
+  --p:#64b5f6;--p2:#42a5f5;--s:#66bb6a;--e:#ef5350;--w:#ffb74d;
+  --bg:#0d1219;--c:#151c28;--t:#e8eef6;--m:#9aabbe;--b:#2a3548;
+  --ok:rgba(102,187,106,.15);--bad:rgba(239,83,80,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+button,input,select{font-family:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--t);line-height:1.45;min-height:100vh;padding-bottom:80px}
+header{background:linear-gradient(135deg,#0d47a1,#1565c0 50%,#1e88e5);color:#fff;padding:14px 12px 12px;text-align:center;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+header h1{font-size:1.15rem;font-weight:700}
+header p{font-size:.75rem;opacity:.9;margin-top:3px}
+.tools{margin-top:8px}
+.tools button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;padding:5px 12px;border-radius:16px;font-size:.72rem;font-weight:600;margin:0 2px}
+#tensePick{max-width:560px;margin:24px auto;padding:0 14px}
+.tp-card{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:18px;margin-bottom:12px;cursor:pointer;transition:.15s;text-align:left}
+.tp-card:hover{border-color:var(--p);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.tp-card h2{font-size:1.05rem;color:var(--p);margin-bottom:4px}
+.tp-card p{font-size:.82rem;color:var(--m)}
+.tp-card .form{font-size:.78rem;margin-top:8px;padding:8px;background:var(--bg);border-radius:8px;font-family:ui-monospace,monospace}
+#app{display:none;max-width:720px;margin:0 auto;padding:10px 12px 24px}
+.back{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--p);margin:8px 0 12px;background:none;border:none}
+.tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.tab{padding:6px 11px;border:2px solid var(--b);border-radius:18px;background:var(--c);font-size:.7rem;font-weight:600;color:var(--p)}
+.tab.active{background:var(--p);color:#fff;border-color:var(--p)}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:14px;margin-bottom:11px}
+.card h3{font-size:.95rem;color:var(--p);margin-bottom:8px}
+.rule{padding:10px;border-left:4px solid var(--p);background:var(--bg);border-radius:0 8px 8px 0;margin-bottom:8px;font-size:.86rem}
+.rule b{display:block;color:var(--p);margin-bottom:2px}
+.ex{font-style:italic;color:var(--m);font-size:.8rem;margin-top:3px}
+table{width:100%;border-collapse:collapse;font-size:.8rem;margin:8px 0}
+th,td{border:1px solid var(--b);padding:6px 8px;text-align:left}
+th{background:var(--bg);color:var(--p)}
+.q{padding:12px 0;border-bottom:1px solid var(--b)}
+.q:last-child{border-bottom:none}
+.q-n{font-size:.68rem;font-weight:700;color:var(--p);margin-bottom:4px}
+.q-t{font-weight:600;font-size:.92rem;margin-bottom:8px}
+.opts{display:flex;flex-direction:column;gap:5px}
+.opt{padding:10px 12px;border:2px solid var(--b);border-radius:8px;background:var(--c);text-align:left;font-size:.86rem}
+.opt.sel{border-color:var(--p);background:rgba(21,101,192,.08)}
+[data-theme=dark] .opt.sel{background:rgba(100,181,246,.12)}
+.opt.ok{border-color:var(--s);background:var(--ok);color:var(--s)}
+.opt.bad{border-color:var(--e);background:var(--bad);color:var(--e)}
+.opt:disabled{pointer-events:none}
+.fb{font-size:.78rem;margin-top:6px;min-height:1.1em}
+.fb.ok{color:var(--s)}.fb.bad{color:var(--e)}
+.btn{padding:10px 14px;border:none;border-radius:8px;background:var(--p);color:#fff;font-weight:600;font-size:.85rem;margin:3px 2px}
+.btn.sec{background:var(--c);color:var(--p);border:2px solid var(--b)}
+.score{text-align:center;font-weight:700;margin:10px 0 4px}
+.bar{height:8px;background:var(--b);border-radius:4px;overflow:hidden;margin:8px 0}
+.fill{height:100%;background:linear-gradient(90deg,var(--p),var(--s));width:0;transition:width .3s}
+.sticky{position:sticky;bottom:0;background:var(--c);border-top:1px solid var(--b);padding:10px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;z-index:20}
+.gap-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.92rem;line-height:1.7}
+.gap-row select,.gap-row input{padding:6px 8px;border:2px solid var(--b);border-radius:6px;background:var(--c);font-size:.85rem;min-width:90px}
+.gap-row select.ok,.gap-row input.ok{border-color:var(--s)}
+.gap-row select.bad,.gap-row input.bad{border-color:var(--e)}
+.err{background:var(--bg);padding:10px;border-radius:8px;font-size:.9rem;margin-bottom:6px}
+.err .w{color:var(--e);text-decoration:line-through;margin-right:6px}
+.hint{font-size:.76rem;color:var(--m);margin-bottom:10px}
 </style>
 </head>
 <body>
-<h1>Continuous Tenses</h1>
-<p>Present · Past · Future Continuous</p>
-<div class="card">
-<p><b>Загрузите полный файл один раз:</b></p>
-<ol>
-<li><a href="https://github.com/uladzislaushevchik-sudo/continuous-tenses/upload/main">Upload files</a></li>
-<li>Файл <code>Continuous_Tenses_Interactive.html</code> → переименовать в <code>index.html</code></li>
-<li>Commit → Settings → Pages → main / root</li>
-</ol>
-<p><a class="btn" href="https://github.com/uladzislaushevchik-sudo/continuous-tenses/upload/main">Загрузить →</a></p>
+<header>
+  <h1>Continuous Tenses</h1>
+  <p>Present · Past · Future Continuous</p>
+  <div class="tools">
+    <button type="button" onclick="toggleTheme()">🌓 Тема</button>
+    <button type="button" onclick="resetAll()">↺ Сброс</button>
+  </div>
+</header>
+
+<div id="tensePick">
+  <div class="tp-card" onclick="start('present')">
+    <h2>Present Continuous</h2>
+    <p>Действие происходит сейчас / временная ситуация / планы</p>
+    <div class="form">am/is/are + V-ing · I am working · She is not sleeping · Are they coming?</div>
+  </div>
+  <div class="tp-card" onclick="start('past')">
+    <h2>Past Continuous</h2>
+    <p>Действие длилось в определённый момент в прошлом</p>
+    <div class="form">was/were + V-ing · I was reading · They were not waiting · Was she cooking?</div>
+  </div>
+  <div class="tp-card" onclick="start('future')">
+    <h2>Future Continuous</h2>
+    <p>Действие будет длиться в определённый момент в будущем</p>
+    <div class="form">will be + V-ing · I will be working · She won't be sleeping · Will they be travelling?</div>
+  </div>
 </div>
+
+<div id="app">
+  <button type="button" class="back" onclick="goHome()">← Все времена</button>
+  <div id="tenseTitle" style="font-weight:700;font-size:1.05rem;color:var(--p);margin-bottom:8px"></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+</div>
+
+<script>
+const STORE='continuousTenses_v1';
+const TENSES={
+  present:{
+    name:'Present Continuous',
+    form:'am / is / are + V-ing',
+    uses:[
+      ['Действие прямо сейчас','Look! It is raining. · She is talking on the phone.'],
+      ['Временная ситуация (не всегда)','I am living with friends this month.'],
+      ['Изменения / развитие','The climate is getting warmer.'],
+      ['Планы на ближайшее будущее (уже решено)','We are meeting at 6. · I am flying to Rome tomorrow.'],
+      ['Раздражающие привычки (с always)','He is always losing his keys!']
+    ],
+    table:[
+      ['+','I am working','He/She/It is working','We/You/They are working'],
+      ['−','I am not working','He is not (isn\'t) working','They are not (aren\'t) working'],
+      ['?','Am I working?','Is she working?','Are they working?']
+    ],
+    markers:'now, at the moment, currently, Look!, Listen!, today, this week, tonight',
+    spelling:'make→making, run→running, lie→lying, study→studying (не убираем y после согласной в -ing: studying)'
+  },
+  past:{
+    name:'Past Continuous',
+    form:'was / were + V-ing',
+    uses:[
+      ['Действие в конкретный момент в прошлом','At 8 pm I was watching TV.'],
+      ['Фон для другого действия (when + Past Simple)','I was cooking when the phone rang.'],
+      ['Два параллельных действия в прошлом','While she was reading, he was sleeping.'],
+      ['Описание атмосферы / сцены в рассказе','The sun was shining and birds were singing.']
+    ],
+    table:[
+      ['+','I/He/She/It was working','We/You/They were working'],
+      ['−','I was not (wasn\'t) working','They were not (weren\'t) working'],
+      ['?','Was she working?','Were they working?']
+    ],
+    markers:'at 5 o\'clock, at that time, while, when, all evening, yesterday at…',
+    spelling:'was (I/he/she/it) · were (you/we/they)'
+  },
+  future:{
+    name:'Future Continuous',
+    form:'will be + V-ing',
+    uses:[
+      ['Действие будет идти в момент в будущем','This time tomorrow I will be flying to Paris.'],
+      ['Вежливый вопрос о планах','Will you be using the car this evening?'],
+      ['То, что точно произойдёт по расписанию/ожиданию','Don\'t call at 9 — I will be sleeping.']
+    ],
+    table:[
+      ['+','I/He/She/We/You/They will be working'],
+      ['−','I will not (won\'t) be working'],
+      ['?','Will she be working? · Will they be travelling?']
+    ],
+    markers:'this time tomorrow, at 8 pm tomorrow, all day tomorrow, when you arrive',
+    spelling:'will be + V-ing для всех лиц (без am/is/are)'
+  }
+};
+
+const DATA={
+  present:{
+    choose:[
+      {q:'Look! It ___ outside.',a:'is raining',o:['is raining','rains','is rain','are raining']},
+      {q:'She ___ to her boss right now.',a:'is talking',o:['is talking','talks','talking','is talk']},
+      {q:'They ___ football at the moment.',a:'are playing',o:['are playing','play','is playing','are play']},
+      {q:'I ___ with my parents this month.',a:'am living',o:['am living','live','am live','is living']},
+      {q:'___ you ___ the film? It\'s great!',a:'Are / watching',o:['Are / watching','Do / watch','Is / watching','Are / watch']},
+      {q:'He ___ always ___ his keys!',a:'is / losing',o:['is / losing','does / lose','is / lose','loses / always']},
+      {q:'We ___ to Madrid next Friday.',a:'are flying',o:['are flying','fly','will flying','are fly']},
+      {q:'The climate ___ warmer.',a:'is getting',o:['is getting','gets','get','is get']}
+    ],
+    gaps:[
+      {t:['She ',' a book now.'],a:['is reading'],o:[['is reading','reads','read']]},
+      {t:['',' they ',' dinner at the moment?'],a:['Are','cooking'],o:[['Are','Do','Is'],['cooking','cook','cooked']]},
+      {t:['I ',' not ',' today — I feel ill.'],a:['am','working'],o:[['am','is','do'],['working','work','worked']]},
+      {t:['Listen! Somebody ',' the piano.'],a:['is playing'],o:[['is playing','plays','play']]}
+    ],
+    error:[
+      {w:'She talking on the phone now.',r:'She is talking on the phone now.'},
+      {w:'They is playing football.',r:'They are playing football.'},
+      {w:'I am go to the shop now.',r:'I am going to the shop now.'},
+      {w:'Does he working today?',r:'Is he working today?'}
+    ],
+    mix:[
+      {q:'___ the baby ___?',a:'Is / sleeping',o:['Is / sleeping','Does / sleep','Is / sleep','Are / sleeping']},
+      {q:'We ___ a new project this week.',a:'are starting',o:['are starting','start','are start','starts']},
+      {q:'Why ___ you ___ at me?',a:'are / looking',o:['are / looking','do / look','is / looking','are / look']}
+    ]
+  },
+  past:{
+    choose:[
+      {q:'At 7 pm I ___ dinner.',a:'was cooking',o:['was cooking','cooked','was cook','were cooking']},
+      {q:'They ___ TV when I arrived.',a:'were watching',o:['were watching','watched','was watching','were watch']},
+      {q:'She ___ not ___ — she was reading.',a:'was / sleeping',o:['was / sleeping','did / sleep','were / sleeping','was / sleep']},
+      {q:'___ you ___ at 9 last night?',a:'Were / working',o:['Were / working','Did / work','Was / working','Were / work']},
+      {q:'While he ___, the phone rang.',a:'was showering',o:['was showering','showered','were showering','was shower']},
+      {q:'The sun ___ and the birds ___.',a:'was shining / were singing',o:['was shining / were singing','shone / sang','was shine / were sing','were shining / was singing']},
+      {q:'I ___ for the bus when it started to rain.',a:'was waiting',o:['was waiting','waited','were waiting','was wait']},
+      {q:'What ___ she ___ at this time yesterday?',a:'was / doing',o:['was / doing','did / do','were / doing','was / do']}
+    ],
+    gaps:[
+      {t:['At midnight we still ',' .' ],a:['were working'],o:[['were working','worked','was working']]},
+      {t:['He ',' when the lights went out.'],a:['was driving'],o:[['was driving','drove','were driving']]},
+      {t:['',' they ',' when you called?'],a:['Were','sleeping'],o:[['Were','Did','Was'],['sleeping','sleep','slept']]},
+      {t:['I ',' not ',' attention.'],a:['was','paying'],o:[['was','were','did'],['paying','pay','paid']]}
+    ],
+    error:[
+      {w:'I was watch TV at 8.',r:'I was watching TV at 8.'},
+      {w:'They was playing football.',r:'They were playing football.'},
+      {w:'She were cooking dinner.',r:'She was cooking dinner.'},
+      {w:'Did you were sleeping?',r:'Were you sleeping?'}
+    ],
+    mix:[
+      {q:'While I ___, my brother ___ video games.',a:'was studying / was playing',o:['was studying / was playing','studied / played','was study / was play','were studying / was playing']},
+      {q:'The children ___ quietly when the teacher came in.',a:'were talking',o:['were talking','talked','was talking','were talk']},
+      {q:'___ it ___ when you left home?',a:'Was / raining',o:['Was / raining','Did / rain','Were / raining','Was / rain']}
+    ]
+  },
+  future:{
+    choose:[
+      {q:'This time tomorrow I ___ to London.',a:'will be flying',o:['will be flying','will fly','am flying','will flying']},
+      {q:'Don\'t call at 10 — she ___ .',a:'will be sleeping',o:['will be sleeping','will sleep','is sleeping','will sleeping']},
+      {q:'___ you ___ the car this evening?',a:'Will / be using',o:['Will / be using','Do / use','Will / use','Are / using']},
+      {q:'They ___ all day tomorrow.',a:'will be working',o:['will be working','will work','are working','will working']},
+      {q:'At 9 pm we ___ dinner.',a:'will be having',o:['will be having','will have','are having','will having']},
+      {q:'He ___ not ___ the meeting — he\'s away.',a:'will / be attending',o:['will / be attending','will / attend','is / attending','won\'t / attend']},
+      {q:'In an hour she ___ the presentation.',a:'will be giving',o:['will be giving','will give','is giving','will giving']},
+      {q:'What ___ you ___ at this time next week?',a:'will / be doing',o:['will / be doing','will / do','are / doing','do / do']}
+    ],
+    gaps:[
+      {t:['This time next year I ',' in Spain.'],a:['will be living'],o:[['will be living','will live','am living']]},
+      {t:['',' you ',' us at the weekend?'],a:['Will','be joining'],o:[['Will','Do','Are'],['be joining','join','joining']]},
+      {t:['They ',' not ',' tomorrow morning.'],a:['will','be travelling'],o:[['will','are','do'],['be travelling','travel','travelling']]},
+      {t:['At midnight he still ',' .' ],a:['will be working'],o:[['will be working','will work','is working']]}
+    ],
+    error:[
+      {w:'I will working tomorrow at 5.',r:'I will be working tomorrow at 5.'},
+      {w:'She will be work in the garden.',r:'She will be working in the garden.'},
+      {w:'Will be you using the computer?',r:'Will you be using the computer?'},
+      {w:'They will not be come.',r:'They will not be coming.'}
+    ],
+    mix:[
+      {q:'Please don\'t disturb me at 3 — I ___ an important call.',a:'will be having',o:['will be having','will have','am having','have']},
+      {q:'___ they ___ when we arrive?',a:'Will / be waiting',o:['Will / be waiting','Are / waiting','Will / wait','Do / wait']},
+      {q:'Next month at this time we ___ on the beach.',a:'will be lying',o:['will be lying','will lie','are lying','will lying']}
+    ]
+  }
+};
+
+let tense=null, state={};
+
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toggleTheme(){const d=document.documentElement;d.setAttribute('data-theme',d.getAttribute('data-theme')==='dark'?'':'dark');}
+function loadS(){try{return JSON.parse(localStorage.getItem(STORE)||'{}');}catch(e){return{};}}
+function saveS(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+function persist(k,ok,t){const d=loadS();d[tense+'_'+k]={ok,total:t,at:new Date().toISOString()};saveS(d);}
+function norm(s){return String(s).toLowerCase().replace(/[’']/g,"'").replace(/[.,!?]/g,'').replace(/\s+/g,' ').trim();}
+
+function goHome(){document.getElementById('app').style.display='none';document.getElementById('tensePick').style.display='block';tense=null;}
+function start(t){
+  tense=t;
+  document.getElementById('tensePick').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('tenseTitle').textContent=TENSES[t].name;
+  build();
+}
+
+function build(){
+  const tabs=[['theory','Теория'],['choose','Выбор'],['gaps','Пропуски'],['error','Ошибки'],['mix','Микс'],['result','Итог']];
+  document.getElementById('tabs').innerHTML=tabs.map(([id,lab])=>`<button type="button" class="tab" data-p="${id}" onclick="show('${id}')">${lab}</button>`).join('');
+  const T=TENSES[tense];
+  const theory=`<div class="panel" id="p-theory"><div class="card">
+    <h3>Формула</h3>
+    <div class="rule"><b>${esc(T.form)}</b></div>
+    <h3 style="margin-top:12px">Случаи употребления</h3>
+    ${T.uses.map(([u,e])=>`<div class="rule"><b>${esc(u)}</b><div class="ex">${esc(e)}</div></div>`).join('')}
+    <h3 style="margin-top:12px">Формы</h3>
+    <table>${T.table.map(r=>`<tr>${r.map((c,i)=>i===0?`<th>${esc(c)}</th>`:`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table>
+    <div class="rule"><b>Маркеры</b><div class="ex">${esc(T.markers)}</div></div>
+    <div class="rule"><b>Важно</b><div class="ex">${esc(T.spelling)}</div></div>
+  </div></div>`;
+
+  const panels=['choose','gaps','error','mix'].map(k=>{
+    return `<div class="panel" id="p-${k}"><div class="card"><h3>${{choose:'Выбор ответа',gaps:'Пропуски',error:'Исправь ошибки',mix:'Микс'}[k]}</h3>
+      <p class="hint">Без подсказок до проверки. Варианты перемешаны.</p>
+      <div class="bar"><div class="fill" id="fill-${k}"></div></div>
+      <div id="box-${k}"></div>
+      <div class="score" id="score-${k}"></div></div>
+      <div class="sticky"><button class="btn" onclick="check('${k}')">Проверить</button>
+      <button class="btn sec" onclick="render('${k}')">Заново</button></div></div>`;
+  }).join('');
+
+  document.getElementById('panels').innerHTML=theory+panels+
+    `<div class="panel" id="p-result"><div class="card"><h3>Итог · ${esc(T.name)}</h3><div id="box-result"></div></div></div>`;
+  ['choose','gaps','error','mix'].forEach(render);
+  show('theory');
+}
+
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.p===id));
+  const el=document.getElementById('p-'+id);
+  if(el) el.classList.add('active');
+  if(id==='result') showResult();
+  window.scrollTo(0,0);
+}
+
+function render(k){
+  const d=DATA[tense][k];
+  if(k==='choose'||k==='mix'){
+    const items=d.map((it,i)=>({...it,_o:shuffle(it.o),_i:i}));
+    state[k]={items,ans:{},done:false};
+    document.getElementById('box-'+k).innerHTML=items.map((it,idx)=>`
+      <div class="q" data-i="${idx}"><div class="q-n">${idx+1}</div><div class="q-t">${esc(it.q)}</div>
+      <div class="opts">${it._o.map(o=>`<button type="button" class="opt" data-v="${esc(o)}" onclick="sel('${k}',${idx},this)">${esc(o)}</button>`).join('')}</div>
+      <div class="fb" id="fb-${k}-${idx}"></div></div>`).join('');
+  } else if(k==='gaps'){
+    state.gaps={items:d};
+    document.getElementById('box-gaps').innerHTML=d.map((g,idx)=>{
+      let h=`<div class="q"><div class="q-n">${idx+1}</div><div class="gap-row">`;
+      g.t.forEach((part,pi)=>{
+        h+=esc(part);
+        if(pi<g.a.length){
+          const opts=shuffle(g.o[pi]);
+          h+=`<select data-g="${idx}" data-p="${pi}"><option value="">—</option>${opts.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select>`;
+        }
+      });
+      return h+`</div><div class="fb" id="fb-gaps-${idx}"></div></div>`;
+    }).join('');
+  } else if(k==='error'){
+    state.error={items:d};
+    document.getElementById('box-error').innerHTML=d.map((e,idx)=>`
+      <div class="q"><div class="q-n">${idx+1}</div>
+      <div class="err"><span class="w">${esc(e.w)}</span></div>
+      <input type="text" id="err-${idx}" placeholder="Правильный вариант" style="width:100%;padding:10px;border:2px solid var(--b);border-radius:8px;background:var(--c);margin-top:6px">
+      <div class="fb" id="fb-error-${idx}"></div></div>`).join('');
+  }
+  document.getElementById('score-'+k).textContent='';
+  const fill=document.getElementById('fill-'+k);
+  if(fill) fill.style.width='0';
+}
+
+function sel(k,i,btn){
+  if(state[k].done) return;
+  state[k].ans[i]=btn.dataset.v;
+  btn.parentElement.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function check(k){
+  if(k==='choose'||k==='mix'){
+    const st=state[k]; st.done=true; let ok=0;
+    st.items.forEach((it,idx)=>{
+      const a=st.ans[idx], good=a===it.a; if(good) ok++;
+      document.querySelectorAll(`#box-${k} .q[data-i="${idx}"] .opt`).forEach(b=>{
+        b.disabled=true;
+        if(b.dataset.v===it.a) b.classList.add('ok');
+        else if(b.dataset.v===a&&!good) b.classList.add('bad');
+      });
+      const fb=document.getElementById(`fb-${k}-${idx}`);
+      fb.className='fb '+(good?'ok':'bad');
+      fb.textContent=good?'✓':'✗ '+it.a;
+    });
+    document.getElementById('score-'+k).textContent=ok+' / '+st.items.length;
+    document.getElementById('fill-'+k).style.width=(ok/st.items.length*100)+'%';
+    persist(k,ok,st.items.length);
+  } else if(k==='gaps'){
+    let ok=0,total=0;
+    state.gaps.items.forEach((g,idx)=>{
+      let all=true;
+      g.a.forEach((ans,pi)=>{
+        total++;
+        const sel=document.querySelector(`select[data-g="${idx}"][data-p="${pi}"]`);
+        if(sel.value===ans){ok++;sel.className='ok';} else {all=false;sel.className='bad';}
+        sel.disabled=true;
+      });
+      const fb=document.getElementById('fb-gaps-'+idx);
+      fb.className='fb '+(all?'ok':'bad');
+      fb.textContent=all?'✓':'✗ '+g.a.join(' · ');
+    });
+    document.getElementById('score-gaps').textContent=ok+' / '+total;
+    document.getElementById('fill-gaps').style.width=(total?ok/total*100:0)+'%';
+    persist('gaps',ok,total);
+  } else if(k==='error'){
+    let ok=0;
+    state.error.items.forEach((e,idx)=>{
+      const v=norm(document.getElementById('err-'+idx).value);
+      const good=v===norm(e.r); if(good) ok++;
+      const fb=document.getElementById('fb-error-'+idx);
+      fb.className='fb '+(good?'ok':'bad');
+      fb.textContent=good?'✓':e.r;
+      document.getElementById('err-'+idx).disabled=true;
+    });
+    document.getElementById('score-error').textContent=ok+' / '+state.error.items.length;
+    document.getElementById('fill-error').style.width=(ok/state.error.items.length*100)+'%';
+    persist('error',ok,state.error.items.length);
+  }
+}
+
+function showResult(){
+  const d=loadS();
+  const keys=['choose','gaps','error','mix'];
+  let h='',sumO=0,sumT=0;
+  keys.forEach(k=>{
+    const r=d[tense+'_'+k];
+    if(r){sumO+=r.ok;sumT+=r.total;h+=`<div class="rule"><b>${k}</b> ${r.ok}/${r.total}</div>`;}
+    else h+=`<div class="rule" style="opacity:.6"><b>${k}</b> ещё не проверено</div>`;
+  });
+  if(sumT) h+=`<div class="score">Всего: ${sumO} / ${sumT} (${Math.round(sumO/sumT*100)}%)</div>`;
+  document.getElementById('box-result').innerHTML=h||'<p class="hint">Пройдите упражнения и нажмите «Проверить».</p>';
+}
+
+function resetAll(){
+  if(tense){
+    const d=loadS();
+    Object.keys(d).forEach(k=>{if(k.startsWith(tense+'_')) delete d[k];});
+    saveS(d);
+    build();
+  } else localStorage.removeItem(STORE);
+}
+</script>
 </body>
 </html>
